@@ -1,6 +1,7 @@
 package com.slippery.jsec.service;
 
 import com.slippery.jsec.model.User;
+import com.slippery.jsec.model.UserPrincipal;
 import com.slippery.jsec.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,10 +18,10 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user =repository.findByUsername(username);
-        if(user !=null){
+        if(user ==null){
             System.out.println("user not found");
             throw new UsernameNotFoundException("user not found");
         }
-        return null;
+        return new UserPrincipal(user);
     }
 }

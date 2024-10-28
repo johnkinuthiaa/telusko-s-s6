@@ -2,18 +2,17 @@ package com.slippery.jsec.service;
 
 import com.slippery.jsec.model.User;
 import com.slippery.jsec.repository.UserRepo;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService{
     private final UserRepo repository;
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder =new BCryptPasswordEncoder(12);
 
 
-    public UserServiceImpl(UserRepo repository, PasswordEncoder passwordEncoder){
+    public UserServiceImpl(UserRepo repository){
         this.repository=repository;
-        this.passwordEncoder = passwordEncoder;
     }
     @Override
     public User createNewUser(User userDetails) {
