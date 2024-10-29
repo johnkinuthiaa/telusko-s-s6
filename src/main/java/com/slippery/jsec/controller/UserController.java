@@ -16,8 +16,8 @@ public class UserController {
     public User registerUser(@RequestBody User user){
         return service.createNewUser(user);
     }
-    @PostMapping("/login")
+    @PostMapping("/verify")
     public String login(@RequestBody User user){
-        return "success";
+        return service.verify(user);
     }
 }
