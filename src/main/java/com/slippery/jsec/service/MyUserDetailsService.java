@@ -3,7 +3,6 @@ package com.slippery.jsec.service;
 import com.slippery.jsec.model.User;
 import com.slippery.jsec.model.UserPrincipal;
 import com.slippery.jsec.repository.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
