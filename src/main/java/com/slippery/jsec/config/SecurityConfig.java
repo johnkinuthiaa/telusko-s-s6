@@ -26,13 +26,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
 
+//        return http.
+//                csrf(AbstractHttpConfigurer::disable)
+//                        .authorizeHttpRequests(request -> request.requestMatchers("user/register","user/verify")
+//                                .permitAll()
+//                                .anyRequest().authenticated())
+//                                .httpBasic(Customizer.withDefaults())
+//                                        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .build();
         return http.
                 csrf(AbstractHttpConfigurer::disable)
-                        .authorizeHttpRequests(request -> request.requestMatchers("user/register","user/verify")
-                                .permitAll()
-                                .anyRequest().authenticated())
-                                .httpBasic(Customizer.withDefaults())
-                                        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(request ->request.requestMatchers("user/register","user/verify")
+                        .permitAll()
+                        .anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(session ->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
     @Bean

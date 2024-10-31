@@ -11,13 +11,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService{
     private final UserRepo repository;
+    private final JwtService jwtService;
     private final BCryptPasswordEncoder passwordEncoder =new BCryptPasswordEncoder(12);
 
     AuthenticationManager authenticationManager;
 
 
-    public UserServiceImpl(UserRepo repository, AuthenticationManager authenticationManager){
+    public UserServiceImpl(UserRepo repository, JwtService jwtService, AuthenticationManager authenticationManager){
         this.repository=repository;
+        this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
     @Override
@@ -28,9 +30,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public String verify(User user) {
-        Authentication authentication =authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+        Authentication authentication =authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                user.getUsername(),
+                user.getPassword()));
         if (authentication.isAuthenticated()) {
-            return "success";
+            return jwtService.generateToken(user.getUsername());
         }
         return "fail";
     }
