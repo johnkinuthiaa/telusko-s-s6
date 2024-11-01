@@ -16,12 +16,19 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Autowired
-    private UserDetailsService userDetailsService;
+
+    private final UserDetailsService userDetailsService;
+
+    private final JwtFilter jwtFilter;
+    public SecurityConfig(UserDetailsService userDetailsService,JwtFilter jwtFilter){
+        this.userDetailsService=userDetailsService;
+        this.jwtFilter=jwtFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
@@ -36,11 +43,12 @@ public class SecurityConfig {
 //                .build();
         return http.
                 csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request ->request.requestMatchers("user/register","user/verify")
+                .authorizeHttpRequests(request ->request.requestMatchers("user/**")
                         .permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session ->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
     @Bean
